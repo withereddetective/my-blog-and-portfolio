@@ -1,0 +1,11 @@
+[
+  {
+    "content": "## [Python Face Constructor](https://github.com/withereddetective/face_constructor)\nIt scans faces and constructs 3D models of those faces.\n- **Status:** In Progress / Not Main Priority\n- **Tech:** Python"
+  },
+  {
+    "content": "## [Godot Multiplayer](https://github.com/withereddetective/godot-multiplayer-test)\nI managed to learn networking and I'm trying to make a game but idk what to make\n- **Status:** Planning\n- **Tech:** Godot"
+  },
+  {
+    "content": "## Upcoming Game\nA writer friend of mine is creating a dream team to make an RPG, and I'm the technical lead!\n- **Status:** Early Planning\n- **Tech:** Probably Godot"
+  }
+]

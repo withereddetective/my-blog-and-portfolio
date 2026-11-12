@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My GitHub Pages Blog</title>
+  <!-- GitHub Markdown CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown-dark.min.css">
+  <link rel="stylesheet" href="style.css">
+  <!-- Marked.js for parsing Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+
+  <!-- Animated Purple Background -->
+  <div class="bg-animation"></div>
+
+  <!-- Fixed Header -->
+  <header class="fixed-header">
+    <nav>
+      <a href="#home" class="nav-link active" data-tab="home">home</a> |
+      <a href="#about" class="nav-link" data-tab="about">about</a> |
+      <a href="#current" class="nav-link" data-tab="current">current projects</a> |
+      <a href="#completed" class="nav-link" data-tab="completed">completed projects</a>
+    </nav>
+  </header>
+
+  <!-- Main Scrollable Content Area -->
+  <main class="content-wrapper">
+    <section id="tab-home" class="tab-content active"></section>
+    <section id="tab-about" class="tab-content centered-tab"></section>
+    <section id="tab-current" class="tab-content"></section>
+    <section id="tab-completed" class="tab-content"></section>
+  </main>
+
+  <!-- Fixed Footer -->
+  <footer class="fixed-footer">
+    Created by <a href="https://github.com/withereddetective" target="_blank">Kyle Haynes</a> Contact: <a href="mailto:withereddetective1@gmail.com">withereddetective1@gmail.com</a>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
