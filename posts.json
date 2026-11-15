@@ -1,5 +1,12 @@
 [
   {
+    "id": "nasa-hackathon",
+    "title": "We did the NASA Space Apps Challenge!",
+    "date": "2026-11-15",
+    "audio": "assets/Waltz of the Forgotten Man.ogg",
+    "content": "The team did the NASA Space Apps Challenge yesterday! I am so proud of our team and how productive we were!\n\n![the team again](./assets/hack_team.jpg)\n\nOur project is called **\"Missions to Mars\"** and you can check it out right [here!](https://github.com/withereddetective/nasa-hackathon)\n\nThe repository is public and you can not only check out our work in the Godot engine, but you can also download the compiled build for Windows by clicking the **Releases** tab on the repository page, as seen here:\n\n![github page](./assets/nasa_git_page.png)\n\nWe had a lot of fun and I can't wait to do more hackathons with this team in the future!\n\n-Withered Detective"
+  },
+  {
     "id": "the-club",
     "title": "Look at the Seguin Computer Science Club!",
     "date": "2026-11-12",
