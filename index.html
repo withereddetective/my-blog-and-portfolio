@@ -36,8 +36,21 @@
 
   <!-- Fixed Footer -->
   <footer class="fixed-footer">
-    Created by <a href="https://github.com/withereddetective" target="_blank">Kyle Haynes</a> Contact: <a href="mailto:withereddetective1@gmail.com">withereddetective1@gmail.com</a>
+    <span class="footer-copy">Created by <a href="https://github.com/withereddetective" target="_blank">Kyle Haynes</a> Contact: <a href="mailto:withereddetective1@gmail.com">withereddetective1@gmail.com</a></span>
+    <span id="visit-count" class="visit-count" aria-live="polite">Loading visits...</span>
   </footer>
+
+  <div id="plant-widget" class="plant-widget">
+    <p id="plant-message" class="plant-message" role="status" aria-live="polite" hidden></p>
+    <img class="watering-can" src="assets/watering-can.png" alt="" aria-hidden="true">
+    <svg class="water-stream" viewBox="0 0 90 82" aria-hidden="true">
+      <path d="M2 50 C24 52 27 62 48 68 C60 70 69 74 78 77"></path>
+      <path d="M8 47 C30 50 34 60 54 66 C66 70 76 74 85 75"></path>
+    </svg>
+    <button id="plant-button" class="plant-button" type="button" aria-label="Water the plant">
+      <img src="assets/plant.png" alt="">
+    </button>
+  </div>
 
   <script type="module" src="app.js"></script>
 </body>

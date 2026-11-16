@@ -2,9 +2,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import {
   addDoc,
   collection,
+  doc,
   getFirestore,
   onSnapshot,
   query,
+  runTransaction,
   serverTimestamp,
   where
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -22,6 +24,172 @@ const firebaseConfig = {
 const db = getFirestore(initializeApp(firebaseConfig));
 const navLinks = document.querySelectorAll(".nav-link");
 const tabContents = document.querySelectorAll(".tab-content");
+const visitCount = document.getElementById("visit-count");
+
+function getLocalDayKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getCounterValue(data, field) {
+  const value = data[field];
+  if (value === undefined) {
+    return 0;
+  }
+  if (!Number.isSafeInteger(value) || value < 0) {
+    throw new Error(`The daily ${field} counter has an invalid value.`);
+  }
+  return value;
+}
+
+async function incrementDailyCounter(dayKey, field, eventCollection) {
+  const statsRef = doc(db, "dailyStats", dayKey);
+  const eventRef = eventCollection ? doc(collection(db, eventCollection)) : null;
+
+  return runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(statsRef);
+    const count = getCounterValue(snapshot.exists() ? snapshot.data() : {}, field) + 1;
+    transaction.set(statsRef, {
+      [field]: count,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+    if (eventRef) {
+      transaction.set(eventRef, {
+        dayKey,
+        createdAt: serverTimestamp()
+      });
+    }
+    return count;
+  });
+}
+
+function setupDailyVisitCount() {
+  if (!visitCount) {
+    return;
+  }
+
+  let activeDayKey;
+  let unsubscribe;
+  const updateDay = () => {
+    const dayKey = getLocalDayKey();
+    if (dayKey === activeDayKey) {
+      return;
+    }
+
+    activeDayKey = dayKey;
+    if (unsubscribe) {
+      unsubscribe();
+    }
+    visitCount.textContent = "0 Total Visits!";
+    unsubscribe = onSnapshot(doc(db, "dailyStats", dayKey), (snapshot) => {
+      try {
+        const count = getCounterValue(snapshot.exists() ? snapshot.data() : {}, "visits");
+        visitCount.textContent = `${count} Total Visits!`;
+      } catch (error) {
+        console.error("Could not read today's visit count:", error);
+        visitCount.textContent = "Visit count unavailable";
+      }
+    }, (error) => {
+      console.error("Could not load today's visit count:", error);
+      visitCount.textContent = "Visit count unavailable";
+    });
+
+    incrementDailyCounter(dayKey, "visits")
+      .catch((error) => {
+        console.error("Could not record this visit:", error);
+        visitCount.textContent = "Visit count unavailable";
+      });
+  };
+
+  updateDay();
+  window.setInterval(updateDay, 60_000);
+}
+
+function wait(milliseconds) {
+  return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+}
+
+function playWateringAudio(audio) {
+  return new Promise((resolve, reject) => {
+    const cleanup = () => {
+      audio.removeEventListener("ended", onEnded);
+      audio.removeEventListener("error", onError);
+    };
+    const onEnded = () => {
+      cleanup();
+      resolve();
+    };
+    const onError = () => {
+      cleanup();
+      reject(new Error("The watering audio could not be loaded or played."));
+    };
+
+    audio.addEventListener("ended", onEnded);
+    audio.addEventListener("error", onError);
+    let playback;
+    try {
+      playback = audio.play();
+    } catch (error) {
+      cleanup();
+      reject(error);
+      return;
+    }
+    if (playback && typeof playback.catch === "function") {
+      playback.catch((error) => {
+        cleanup();
+        reject(error);
+      });
+    }
+  });
+}
+
+function setupPlant() {
+  const widget = document.getElementById("plant-widget");
+  const button = document.getElementById("plant-button");
+  const bubble = document.getElementById("plant-message");
+
+  if (!widget || !button || !bubble) {
+    return;
+  }
+
+  const audio = new Audio("assets/water.mp3");
+  audio.preload = "auto";
+
+  button.addEventListener("click", async () => {
+    if (button.disabled) {
+      return;
+    }
+
+    button.disabled = true;
+    bubble.hidden = true;
+    widget.classList.add("can-visible", "watering");
+
+    try {
+      await playWateringAudio(audio);
+      widget.classList.remove("watering");
+      await wait(500);
+      widget.classList.remove("can-visible");
+
+      const count = await incrementDailyCounter(
+        getLocalDayKey(),
+        "plantWaterings",
+        "plantWaterings"
+      );
+      bubble.textContent = `The Plant has been Watered ${count} Times`;
+    } catch (error) {
+      console.error("Could not complete plant watering:", error);
+      widget.classList.remove("watering", "can-visible");
+      bubble.textContent = "The plant could not be watered. Please try again.";
+    }
+
+    bubble.hidden = false;
+    await wait(4000);
+    bubble.hidden = true;
+    button.disabled = false;
+  });
+}
 
 function switchTab(tabName) {
   const tabExists = Array.from(tabContents).some((tab) => tab.id === `tab-${tabName}`);
@@ -158,6 +326,15 @@ function addAudioPlayer(post, header) {
     return;
   }
 
+  const audioBlock = document.createElement("div");
+  audioBlock.className = "audio-block";
+  if (typeof post.audioCredits === "string" && post.audioCredits.trim()) {
+    const credits = document.createElement("span");
+    credits.className = "audio-credits";
+    credits.textContent = post.audioCredits;
+    audioBlock.appendChild(credits);
+  }
+
   const player = document.createElement("div");
   player.className = "custom-audio-player";
   const audio = document.createElement("audio");
@@ -196,7 +373,8 @@ function addAudioPlayer(post, header) {
   errorMessage.setAttribute("role", "status");
 
   player.append(audio, playButton, playbackIndicator, volumeIcon, volumeSlider, errorMessage);
-  header.appendChild(player);
+  audioBlock.appendChild(player);
+  header.appendChild(audioBlock);
 
   const updatePlayButton = () => {
     const isPlaying = !audio.paused;
@@ -276,6 +454,19 @@ function addCommentForm(post, article) {
   const heading = document.createElement("h3");
   heading.textContent = "Comments";
 
+  const list = document.createElement("div");
+  list.className = "comments-list";
+
+  if (post.commentsLocked === true) {
+    const lockedMessage = document.createElement("p");
+    lockedMessage.className = "comments-locked";
+    lockedMessage.textContent = "Comments are closed for this post.";
+    section.append(heading, lockedMessage, list);
+    article.appendChild(section);
+    renderComments(post.id, list);
+    return;
+  }
+
   const form = document.createElement("form");
   form.className = "comment-form";
   const row = document.createElement("div");
@@ -312,9 +503,6 @@ function addCommentForm(post, article) {
   const status = document.createElement("p");
   status.className = "comment-status";
   status.setAttribute("role", "status");
-  const list = document.createElement("div");
-  list.className = "comments-list";
-
   form.append(row, bodyInput, submitButton, status);
   section.append(heading, form, list);
   article.appendChild(section);
@@ -370,7 +558,8 @@ async function loadPosts() {
 
     const cards = posts.map((post) => {
       if (!post || typeof post.id !== "string" || typeof post.title !== "string" ||
-          typeof post.content !== "string") {
+          typeof post.content !== "string" || typeof post.commentsLocked !== "boolean" ||
+          (post.audioCredits !== null && typeof post.audioCredits !== "string")) {
         throw new Error("posts.json contains a post with invalid or missing fields.");
       }
 
@@ -413,3 +602,5 @@ loadAbout();
 loadProjects("current.json", "tab-current");
 loadProjects("completed.json", "tab-completed");
 loadPosts();
+setupDailyVisitCount();
+setupPlant();

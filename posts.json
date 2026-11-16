@@ -1,9 +1,20 @@
 [
   {
+    "id": "update-1",
+    "title": "First Big Update!",
+    "date": "2026-11-16",
+    "audio": "assets/13 Still Alive (J.C. Mix).mp3",
+    "audioCredits": "\"13 Still Alive (J.C. Mix)\" by Jonathan Coulton",
+    "commentsLocked": true,
+    "content": "This is the first big update to the site! I have added a few new features, including:\n\n- The ability to lock comments on posts\n- Audio credits for posts with audio\n- A new plant that can be watered!\n- Logging the amount of visits\n\nPlease try not to spam reload or spam the plant, while yes it is very hard to max out the use of firebase, it is nowhere near impossible. I hope this post is a good example of some of the newly added features.\n\nI will continue to add more features as I think of them, and I will continue to post regularly.\n\n-Withered Detective"
+  },
+  {
     "id": "nasa-hackathon",
     "title": "We did the NASA Space Apps Challenge!",
     "date": "2026-11-15",
     "audio": "assets/Waltz of the Forgotten Man.ogg",
+    "audioCredits": "\"Waltz of the Forgotten Man\" by Toby Fox",
+    "commentsLocked": false,
     "content": "The team did the NASA Space Apps Challenge yesterday! I am so proud of our team and how productive we were!\n\n![the team again](./assets/hack_team.jpg)\n\nOur project is called **\"Missions to Mars\"** and you can check it out right [here!](https://github.com/withereddetective/nasa-hackathon)\n\nThe repository is public and you can not only check out our work in the Godot engine, but you can also download the compiled build for Windows by clicking the **Releases** tab on the repository page, as seen here:\n\n![github page](./assets/nasa_git_page.png)\n\nWe had a lot of fun and I can't wait to do more hackathons with this team in the future! We are starting the Godot Wild Jam 99 this next week, and I cannot wait to see what this team can do with even more time on our hands!\n\n-Withered Detective\n\nEdit: I added the part at the end about the Godot Wild Jam 99, I forgot to mention it in the original post."
   },
   {
@@ -11,6 +22,8 @@
     "title": "Look at the Seguin Computer Science Club!",
     "date": "2026-11-12",
     "audio": null,
+    "audioCredits": null,
+    "commentsLocked": false,
     "content": "Its the computer science team at my school! (Well, except for Vincent) These guys are the best! Just wanted to show them off.\n\n![the team](./assets/20261112_152854.jpg)\n\n**Me**- Bottom Left\n\n**Zak**- Above me, not really the best at computer science but he can light up the room!\n\n**Henry**- Above Zak, pretty novice with computers but realy good at art and super friendly!\n\n**Xander**- Next to Zak, very close friend, he is very talented and I am always inspired by what he does! he even has his own portfolio website right [here!](https://realprot0n.github.io/)\n\n**Michael**- Above Xander, super smart! He is learning computer science very quickly, I am very invested in his journey! He impresses in everything he does.\n\n**Mr. Schramm**- Top right corner, he's kinda just been along for the ride, but he's been a very good sponsor and coach!\n\n**Vincent**- Not here, he's only recently found out that he wants to do web development with his life and he's been making great progress! He's also very cool to talk and play games with.\n\nSo yeah, thats the club! They are all very great and I couldn't have wished for a better team to have!\n\n-Withered Detective"
   },
   {
@@ -18,6 +31,8 @@
     "title": "I have made a blog!",
     "date": "2026-11-11",
     "audio": "assets/Nagasagy Kikky Park.ogg",
+    "audioCredits": "\"Nagasagy Kikky Park\" by Toby Fox",
+    "commentsLocked": false,
     "content": "Isn't this so totally tubular? I spent a few hours on this. I hope I can make this something great! Feel free to leave a comment here.\n\nIn other news, the seguin comp sci team and I are doing the nasa space apps challenge saturday! We are also doing the Godot Wild Jam 99 this next week. Now that my eagle project is done, I can't wait to get back into the swing of things.\n\nCheck out my other projects too! look up to the tabs on the top of this page.\n\n-Withered Detective\n![my pfp](./assets/channels4_profile.jpg)"
   }
 ]

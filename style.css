@@ -57,6 +57,11 @@ body {
   border-width: 1px 0 0 0;
   font-size: 0.9rem;
   color: #c4b5fd;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  min-height: 48px;
+  padding-right: 136px;
 }
 
 .fixed-header a, .fixed-footer a {
@@ -69,6 +74,18 @@ body {
 .fixed-header a:hover, .fixed-footer a:hover, .fixed-header a.active {
   color: #ffffff;
   text-decoration: underline;
+}
+
+.footer-copy {
+  text-align: center;
+}
+
+.visit-count {
+  position: absolute;
+  right: 120px;
+  white-space: nowrap;
+  color: #d8b4fe;
+  font-size: 0.85rem;
 }
 
 /* Main Content Area (padded so fixed header/footer don't cover text) */
@@ -151,6 +168,24 @@ body {
   box-shadow: inset 0 1px 0 #fff, 0 1px 3px rgba(0,0,0,0.4);
 }
 
+.audio-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.audio-credits {
+  max-width: 220px;
+  margin-bottom: 5px;
+  overflow: hidden;
+  color: #9ca3af;
+  font-size: 0.68rem;
+  line-height: 1;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .audio-error {
   color: #8b1e1e;
   font-size: 0.8rem;
@@ -224,6 +259,12 @@ body {
 .comments-section h4 {
   margin-bottom: 12px;
   color: #d8b4fe;
+}
+
+.comments-locked {
+  margin-bottom: 20px;
+  color: #a89bbd;
+  font-size: 0.9rem;
 }
 
 .comment-form {
@@ -335,6 +376,122 @@ body {
   color: #e6edf3;
 }
 
+.plant-widget {
+  position: fixed;
+  z-index: 1001;
+  right: 12px;
+  bottom: 48px;
+  width: 140px;
+  height: 150px;
+  pointer-events: none;
+}
+
+.plant-button {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 112px;
+  height: 112px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.2s ease;
+  transform-origin: bottom center;
+}
+
+.plant-button:hover:not(:disabled),
+.plant-button:focus-visible:not(:disabled) {
+  transform: scale(1.12);
+}
+
+.plant-button:disabled {
+  cursor: default;
+}
+
+.plant-button img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.plant-message {
+  position: absolute;
+  right: 0;
+  bottom: 122px;
+  width: max-content;
+  max-width: 230px;
+  padding: 8px 10px;
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  border-radius: 8px;
+  background: #12091f;
+  color: #e6edf3;
+  font-size: 0.8rem;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+
+.plant-message[hidden] {
+  display: none;
+}
+
+.watering-can {
+  position: absolute;
+  top: 0;
+  left: -82px;
+  z-index: 1;
+  width: 126px;
+  height: 68px;
+  object-fit: contain;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(14px, 8px) rotate(0) scaleX(-1);
+  transition: opacity 0.25s ease, transform 0.5s ease;
+}
+
+.plant-widget.can-visible .watering-can {
+  opacity: 1;
+}
+
+.plant-widget.watering .watering-can {
+  transform: translate(0, 12px) rotate(18deg) scaleX(-1);
+}
+
+.water-stream {
+  position: absolute;
+  top: 0;
+  left: 14px;
+  z-index: 2;
+  width: 72px;
+  height: 82px;
+  overflow: visible;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.water-stream path {
+  fill: none;
+  stroke: #60a5fa;
+  stroke-linecap: round;
+  stroke-width: 3;
+  stroke-dasharray: 8 7;
+  stroke-dashoffset: 0;
+}
+
+.plant-widget.watering .water-stream {
+  opacity: 1;
+}
+
+.plant-widget.watering .water-stream path {
+  animation: water-flow 0.55s linear infinite;
+}
+
+@keyframes water-flow {
+  to { stroke-dashoffset: -30; }
+}
+
 @media (max-width: 540px) {
   .fixed-header,
   .fixed-footer {
@@ -352,6 +509,12 @@ body {
 
   .fixed-footer {
     font-size: 0.78rem;
+    padding: 8px 96px 8px 8px;
+  }
+
+  .visit-count {
+    right: 88px;
+    font-size: 0.7rem;
   }
 
   .content-wrapper {
@@ -364,5 +527,38 @@ body {
 
   .post-date {
     margin-left: 0;
+  }
+
+  .plant-widget {
+    right: 4px;
+    width: 104px;
+    height: 118px;
+    bottom: 48px;
+  }
+
+  .plant-button {
+    width: 88px;
+    height: 88px;
+  }
+
+  .plant-message {
+    bottom: 96px;
+    right: 0;
+    max-width: 200px;
+    font-size: 0.72rem;
+  }
+
+  .watering-can {
+    top: 0;
+    left: -62px;
+    width: 100px;
+    height: 54px;
+  }
+
+  .water-stream {
+    top: 12px;
+    left: 23px;
+    width: 40px;
+    height: 60px;
   }
 }
