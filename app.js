@@ -191,6 +191,118 @@ function setupPlant() {
   });
 }
 
+function setupWhiteboard() {
+  const button = document.getElementById("whiteboard-button");
+  const message = document.getElementById("whiteboard-message");
+  if (!button || !message) {
+    return;
+  }
+
+  let messages = [];
+  fetch("whiteboard-messages.json")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Could not load whiteboard-messages.json (${response.status}).`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (!data || !Array.isArray(data.messages) ||
+          data.messages.some((item) => typeof item !== "string" || !item.trim())) {
+        throw new Error("whiteboard-messages.json must contain a messages array of non-empty strings.");
+      }
+      messages = data.messages;
+      button.disabled = false;
+    })
+    .catch((error) => {
+      console.error("Could not load whiteboard messages:", error);
+      message.textContent = "Messages unavailable.";
+      message.hidden = false;
+    });
+
+  button.addEventListener("click", async () => {
+    if (button.disabled) {
+      return;
+    }
+    button.disabled = true;
+    const index = Math.floor(Math.random() * messages.length);
+    message.textContent = messages[index] || "No messages to show yet.";
+    message.hidden = false;
+    await wait(4000);
+    message.hidden = true;
+    button.disabled = false;
+  });
+}
+
+function setupDonutAnimation() {
+  const canvas = document.getElementById("donut-animation");
+  if (!canvas) {
+    return;
+  }
+
+  const width = 24;
+  const height = 12;
+  const theta = Array.from({ length: 63 }, (_, index) => index * 0.1);
+  const phi = Array.from({ length: 63 }, (_, index) => index * 0.1);
+  const sinTheta = theta.map(Math.sin);
+  const cosTheta = theta.map(Math.cos);
+  const sinPhi = phi.map(Math.sin);
+  const cosPhi = phi.map(Math.cos);
+  const illumination = ".,-~:;=!*#$@";
+  const r1 = 1;
+  const r2 = 2;
+  const k2 = 5;
+  const k1 = 7.5;
+  let angleA = 1;
+  let angleB = 1;
+
+  const drawFrame = () => {
+    const sinA = Math.sin(angleA);
+    const cosA = Math.cos(angleA);
+    const sinB = Math.sin(angleB);
+    const cosB = Math.cos(angleB);
+    const frame = Array.from({ length: height }, () => Array(width).fill(" "));
+    const depth = Array.from({ length: height }, () => Array(width).fill(0));
+
+    for (let phiIndex = 0; phiIndex < phi.length; phiIndex += 1) {
+      for (let thetaIndex = 0; thetaIndex < theta.length; thetaIndex += 1) {
+        const circleX = r2 + r1 * cosTheta[thetaIndex];
+        const circleY = r1 * sinTheta[thetaIndex];
+        const x = (cosB * cosPhi[phiIndex] + sinA * sinB * sinPhi[phiIndex]) * circleX -
+          circleY * cosA * sinB;
+        const y = (sinB * cosPhi[phiIndex] - sinA * cosB * sinPhi[phiIndex]) * circleX +
+          circleY * cosA * cosB;
+        const z = k2 + cosA * sinPhi[phiIndex] * circleX + circleY * sinA;
+        const inverseZ = 1 / z;
+        const xIndex = Math.floor(width / 2 + k1 * inverseZ * x);
+        const yIndex = Math.floor(height / 2 - k1 * inverseZ * y);
+        if (xIndex < 0 || xIndex >= width || yIndex < 0 || yIndex >= height || inverseZ <= depth[yIndex][xIndex]) {
+          continue;
+        }
+
+        const light = 8 * (
+          cosPhi[phiIndex] * cosTheta[thetaIndex] * sinB -
+          cosA * cosTheta[thetaIndex] * sinPhi[phiIndex] -
+          sinA * sinTheta[thetaIndex] +
+          cosB * (cosA * sinTheta[thetaIndex] - sinPhi[phiIndex] * cosTheta[thetaIndex] * sinA)
+        );
+        if (light >= 0) {
+          const shade = Math.min(illumination.length - 1, Math.round(light));
+          depth[yIndex][xIndex] = inverseZ;
+          frame[yIndex][xIndex] = illumination[shade];
+        }
+      }
+    }
+
+    canvas.textContent = frame.map((row) => row.join("")).join("\n");
+    angleA += 0.04;
+    angleB += 0.02;
+    window.setTimeout(drawFrame, 50);
+  };
+
+  drawFrame();
+}
+
 function switchTab(tabName) {
   const tabExists = Array.from(tabContents).some((tab) => tab.id === `tab-${tabName}`);
   const activeTab = tabExists ? tabName : "home";
@@ -556,7 +668,7 @@ async function loadPosts() {
       throw new Error("posts.json must contain a JSON array.");
     }
 
-    const cards = posts.map((post) => {
+    const cards = posts.map((post, index) => {
       if (!post || typeof post.id !== "string" || typeof post.title !== "string" ||
           typeof post.content !== "string" || typeof post.commentsLocked !== "boolean" ||
           (post.audioCredits !== null && typeof post.audioCredits !== "string")) {
@@ -580,11 +692,29 @@ async function loadPosts() {
         header.appendChild(date);
       }
 
+      const details = document.createElement("div");
+      details.className = "post-details";
+      details.id = `post-details-${index}`;
       const content = document.createElement("div");
       content.className = "markdown-body";
       content.innerHTML = markdownToHtml(post.content);
-      article.append(header, content);
-      addCommentForm(post, article);
+      details.appendChild(content);
+      const toggle = document.createElement("button");
+      toggle.className = "post-toggle";
+      toggle.type = "button";
+      toggle.textContent = "Minimize";
+      toggle.setAttribute("aria-expanded", "true");
+      toggle.setAttribute("aria-controls", details.id);
+      toggle.addEventListener("click", () => {
+        const collapsed = !details.hidden;
+        details.hidden = collapsed;
+        article.classList.toggle("collapsed", collapsed);
+        toggle.textContent = collapsed ? "Maximize" : "Minimize";
+        toggle.setAttribute("aria-expanded", String(!collapsed));
+      });
+      header.appendChild(toggle);
+      article.append(header, details);
+      addCommentForm(post, details);
       return article;
     });
 
@@ -604,3 +734,5 @@ loadProjects("completed.json", "tab-completed");
 loadPosts();
 setupDailyVisitCount();
 setupPlant();
+setupWhiteboard();
+setupDonutAnimation();

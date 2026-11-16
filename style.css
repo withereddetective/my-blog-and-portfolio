@@ -296,6 +296,11 @@ body {
   min-width: 180px;
 }
 
+.comment-form textarea {
+  width: 100%;
+  resize: vertical;
+}
+
 .file-label {
   background: #21262d;
   border: 1px solid #30363d;
@@ -375,6 +380,89 @@ body {
   font-size: 0.95rem;
   white-space: pre-wrap;
   color: #e6edf3;
+}
+
+.post-toggle {
+  border: 1px solid #6b21a8;
+  border-radius: 6px;
+  padding: 6px 10px;
+  background: #21262d;
+  color: #e6edf3;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.post-toggle:hover {
+  background: #30363d;
+}
+
+.blog-post.collapsed .post-details {
+  display: none;
+}
+
+.whiteboard-button {
+  position: absolute;
+  top: 8px;
+  left: 24px;
+  width: 132px;
+  height: 132px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transform-origin: 52% 9%;
+  transition: transform 0.2s ease;
+}
+
+.whiteboard-button:hover:not(:disabled),
+.whiteboard-button:focus-visible:not(:disabled) {
+  transform: scale(1.12);
+}
+
+.whiteboard-button:disabled {
+  cursor: default;
+}
+
+.whiteboard-button img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.whiteboard-message {
+  position: absolute;
+  top: 35%;
+  left: 14%;
+  display: grid;
+  width: 72%;
+  height: 50%;
+  place-items: center;
+  overflow: hidden;
+  color: #1f2937;
+  font-size: 0.58rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.whiteboard-message[hidden] {
+  display: none;
+}
+
+.donut-animation {
+  position: absolute;
+  top: 4px;
+  right: 12px;
+  margin: 0;
+  color: #d8b4fe;
+  font-family: monospace;
+  font-size: 4px;
+  line-height: 4px;
+  white-space: pre;
+  pointer-events: none;
 }
 
 .plant-widget {
@@ -501,6 +589,25 @@ body {
 
   .fixed-header {
     font-size: 0.9rem;
+    padding: 10px 56px 10px 92px;
+  }
+
+  .whiteboard-button {
+    top: 5px;
+    left: 12px;
+    width: 72px;
+    height: 72px;
+  }
+
+  .whiteboard-message {
+    font-size: 0.4rem;
+  }
+
+  .donut-animation {
+    top: 5px;
+    right: 5px;
+    font-size: 2.5px;
+    line-height: 2.5px;
   }
 
   .fixed-header a,
@@ -520,7 +627,7 @@ body {
   }
 
   .content-wrapper {
-    padding: 72px 12px 72px;
+    padding: 90px 12px 72px;
   }
 
   .card {

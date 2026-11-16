@@ -1,5 +1,14 @@
 [
   {
+    "id": "update-2",
+    "title": "Addition to the First Big Update",
+    "date": "2026-11-16",
+    "audio": "assets/023 - Motorway.flac",
+    "audioCredits": "\"Motorway\" by Michael 'Yoyle Cake' Huang",
+    "commentsLocked": false,
+    "content": "So I have just been having too much fun working on this website. I have been adding even more features such as:\n\n- The ability to minimize and maximize posts\n- A spinning donut in the top left corner of the page\n- A whiteboard that says random messages when you click it\n\nI will keep making new posts and I will respond to comments as much as I can, although I will refrain from just saying thank you to \"oh this is so cool!!!1!\" comments. However, I will pause on the updates to the site for now, I have other projects that I also want to continue working on, check the 'current projects' tab for that.\n\nI would like to say one more thing though, please start commenting on literally any post besides the oldest one. Feel free to leave comments or suggestions on other posts too! Use this post for any issues or suggestions you want to bring up before the next big update!\n\nBut anyways, thank you for using this site.\n\n-Withered Detective"
+  },
+  {
     "id": "update-1",
     "title": "First Big Update!",
     "date": "2026-11-16",
