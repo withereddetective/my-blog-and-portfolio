@@ -4,7 +4,7 @@
     "title": "First Big Update!",
     "date": "2026-11-16",
     "audio": "assets/13 Still Alive (J.C. Mix).mp3",
-    "audioCredits": "\"13 Still Alive (J.C. Mix)\" by Jonathan Coulton",
+    "audioCredits": "\"Still Alive (J.C. Mix)\" by Jonathan Coulton",
     "commentsLocked": true,
     "content": "This is the first big update to the site! I have added a few new features, including:\n\n- The ability to lock comments on posts\n- Audio credits for posts with audio\n- A new plant that can be watered!\n- Logging the amount of visits\n\nPlease try not to spam reload or spam the plant, while yes it is very hard to max out the use of firebase, it is nowhere near impossible. I hope this post is a good example of some of the newly added features.\n\nI will continue to add more features as I think of them, and I will continue to post regularly.\n\n-Withered Detective"
   },

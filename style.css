@@ -57,11 +57,9 @@ body {
   border-width: 1px 0 0 0;
   font-size: 0.9rem;
   color: #c4b5fd;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
+  display: flex;
+  justify-content: center;
   min-height: 48px;
-  padding-right: 136px;
 }
 
 .fixed-header a, .fixed-footer a {
@@ -82,10 +80,13 @@ body {
 
 .visit-count {
   position: absolute;
-  right: 120px;
+  top: 100%;
+  right: 0;
+  width: 112px;
   white-space: nowrap;
   color: #d8b4fe;
   font-size: 0.85rem;
+  text-align: center;
 }
 
 /* Main Content Area (padded so fixed header/footer don't cover text) */
@@ -509,11 +510,12 @@ body {
 
   .fixed-footer {
     font-size: 0.78rem;
-    padding: 8px 96px 8px 8px;
+    padding: 8px;
   }
 
   .visit-count {
-    right: 88px;
+    right: 0;
+    width: 88px;
     font-size: 0.7rem;
   }
 
