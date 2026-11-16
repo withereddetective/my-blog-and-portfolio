@@ -82,11 +82,11 @@ function setupDailyVisitCount() {
     if (unsubscribe) {
       unsubscribe();
     }
-    visitCount.textContent = "0 Total Visits!";
+    visitCount.textContent = "0 Visits Today!";
     unsubscribe = onSnapshot(doc(db, "dailyStats", dayKey), (snapshot) => {
       try {
         const count = getCounterValue(snapshot.exists() ? snapshot.data() : {}, "visits");
-        visitCount.textContent = `${count} Total Visits!`;
+        visitCount.textContent = `${count} Visits Today!`;
       } catch (error) {
         console.error("Could not read today's visit count:", error);
         visitCount.textContent = "Visit count unavailable";
@@ -177,7 +177,7 @@ function setupPlant() {
         "plantWaterings",
         "plantWaterings"
       );
-      bubble.textContent = `The Plant has been Watered ${count} Times`;
+      bubble.textContent = `The Plant has been Watered ${count} Times Today!`;
     } catch (error) {
       console.error("Could not complete plant watering:", error);
       widget.classList.remove("watering", "can-visible");
