@@ -1,5 +1,14 @@
 [
   {
+    "id": "sticks-1",
+    "title": "I found out what to do with the Godot Multiplayer Project!",
+    "date": "2026-11-19",
+    "audio": "assets/04 Self Esteem Fund.mp3",
+    "audioCredits": "\"Self Esteem Fund\" by Jonathan Coulton",
+    "commentsLocked": false,
+    "content": "So I did a thing...\n\nOk yes, you read the title of the post, I did it. It kinda works right now, at the computer science club meet it wasn't wanting to work across computers but maybe that was the district. It definetly needs further testing and development. I'm currently trying to get Henry to make the assets for this project so I can make it look better but I don't know if I want to continually work on a singular project for days on end. I like when I can think of cool additions to a project without having to worry about finding time to work on it, it gives me time to think of good implementation. That's kinda whats also happening with this website too. I don't know, but feel free to take a look at the game.\n\n![the current game look](./assets/sticks_game_01.png)\n\nYou can find it in the \"current projects\" tab or you can just click the link right [here](https://github.com/withereddetective/godot-online-sticks-game). Its mostly the same low level networking code as before, I don't feel like giving a huge breakdown of it right here. Perhapds when I finish a project I'll make a whole post breaking down how it works. Anyhow, I will begin work on the face constructor again and I will hopefully finish it soon.\n\nUnfortunate news from the Seguin Computer Science club, we will not actually do the Godot Wild Game Jam 99, none of us did any work yet so we vowed to actually do it next month.\n\nBut to end off on a good note, check out this game Henry made!\n\n![Henry's game](./assets/henry_game_01.png)\n\nHe's been working on it on and off for a while now, its inspired heavily be Undertale and Deltarune but it has quite a few changes to stand out as well as his own cool artstyle! He wanted me to advertise it so I hope this is worth it! He's starting to do more projects so that's really nice. You can check it out right [here](https://scratch.mit.edu/projects/1210001511).\n\nIn other news, I am just on the cusp of getting my Eagle Rank! That's been taking a lot of my time... Anyways, thats all I have for now! Keep interacting with the blog! I'll respond whenever someone comments!\n\n-Withered Detective"
+  },
+  {
     "id": "update-2",
     "title": "Addition to the First Big Update",
     "date": "2026-11-16",
