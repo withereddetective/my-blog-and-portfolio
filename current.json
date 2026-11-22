@@ -1,8 +1,5 @@
 [
   {
-    "content": "## [Python Face Constructor](https://github.com/withereddetective/face_constructor)\nIt scans faces and constructs 3D models of those faces.\n- **Status:** In Progress\n- **Tech:** Python"
-  },
-  {
     "content": "## [Online Sticks Game](https://github.com/withereddetective/godot-online-sticks-game)\nI managed to learn networking and I'm making the popular school game Sticks!\n- **Status:** In Progress\n- **Tech:** Godot"
   },
   {
