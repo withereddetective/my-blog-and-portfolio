@@ -18,12 +18,14 @@
 
   <!-- Fixed Header -->
   <header class="fixed-header">
-    <nav>
+    <nav id="site-nav">
       <a href="#home" class="nav-link active" data-tab="home">home</a> |
       <a href="#about" class="nav-link" data-tab="about">about</a> |
       <a href="#current" class="nav-link" data-tab="current">current projects</a> |
       <a href="#completed" class="nav-link" data-tab="completed">completed projects</a>
     </nav>
+    <nav id="game-nav" hidden aria-label="Arrow Game navigation"></nav>
+    <nav id="blackjack-nav" hidden aria-label="Blackjack navigation"></nav>
     <button id="whiteboard-button" class="whiteboard-button" type="button" aria-label="Show a whiteboard message" disabled>
       <img src="assets/whiteboard.png" alt="">
       <span id="whiteboard-message" class="whiteboard-message" role="status" aria-live="polite" hidden></span>
@@ -38,6 +40,9 @@
     <section id="tab-current" class="tab-content"></section>
     <section id="tab-completed" class="tab-content"></section>
   </main>
+
+  <div id="arrow-game-root" hidden></div>
+  <div id="blackjack-root" hidden></div>
 
   <!-- Fixed Footer -->
   <footer class="fixed-footer">

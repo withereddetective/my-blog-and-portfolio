@@ -6,7 +6,7 @@
     "content": "## [3D Speedrun Platformer](https://withered-detective.itch.io/pay-your-taxes)\nMy very good friend Proton and I did this for our Comp Sci A end of year project, and it came out very well!\n- **Tech:** Godot, Projekt Jenova, C++"
   },
   {
-    "content": "## [Python Face Constructor](https://github.com/withereddetective/face_constructor)\nIt scans faces and constructs 3D models of those faces.\n- **Tech:** Python, PySide6, OpenCV, Mediapipe, Oped3d, PyYAML"
+    "content": "## [Face Constructor](https://github.com/withereddetective/face_constructor)\nIt scans faces and constructs 3D models of those faces.\n- **Tech:** Python, PySide6, OpenCV, Mediapipe, Oped3d, PyYAML"
   },
   {
     "content": "## [Pygame Blackjack](https://github.com/withereddetective/blackjack)\nIt's Blackjack, in Pygame! Assets made by my good friend Henry.\n- **Tech:** Python and Pygame"

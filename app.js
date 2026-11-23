@@ -1,4 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { setupArrowGame } from "./arrowgame.js";
+import { setupBlackjackGame } from "./blackjack.js";
 import {
   addDoc,
   collection,
@@ -25,6 +27,25 @@ const db = getFirestore(initializeApp(firebaseConfig));
 const navLinks = document.querySelectorAll(".nav-link");
 const tabContents = document.querySelectorAll(".tab-content");
 const visitCount = document.getElementById("visit-count");
+const contentWrapper = document.querySelector(".content-wrapper");
+const fixedHeader = document.querySelector(".fixed-header");
+const fixedFooter = document.querySelector(".fixed-footer");
+let arrowGame = null;
+let blackjackGame = null;
+
+function updateContentBounds() {
+  document.documentElement.style.setProperty("--fixed-header-height", `${fixedHeader.getBoundingClientRect().height}px`);
+  document.documentElement.style.setProperty("--fixed-footer-height", `${fixedFooter.getBoundingClientRect().height}px`);
+}
+
+updateContentBounds();
+if ("ResizeObserver" in window) {
+  const contentBoundsObserver = new ResizeObserver(updateContentBounds);
+  contentBoundsObserver.observe(fixedHeader);
+  contentBoundsObserver.observe(fixedFooter);
+} else {
+  window.addEventListener("resize", updateContentBounds);
+}
 
 function getLocalDayKey(date = new Date()) {
   const year = date.getFullYear();
@@ -321,18 +342,39 @@ function switchTab(tabName) {
   });
 }
 
+function handleRoute() {
+  const route = window.location.hash.slice(1);
+  if (route === "blackjack" && blackjackGame) {
+    if (arrowGame) {
+      arrowGame.close();
+    }
+    blackjackGame.open();
+    return;
+  }
+  if (blackjackGame) {
+    blackjackGame.close();
+  }
+  if (["game", "how-to-play", "leaderboard"].includes(route) && arrowGame) {
+    arrowGame.navigate(route);
+    return;
+  }
+  if (arrowGame) {
+    arrowGame.close();
+  }
+  switchTab(route || "home");
+}
+
 navLinks.forEach((link) => {
   link.addEventListener("click", (event) => {
     event.preventDefault();
     window.location.hash = link.dataset.tab;
-    switchTab(link.dataset.tab);
+    handleRoute();
   });
 });
 
 window.addEventListener("hashchange", () => {
-  switchTab(window.location.hash.slice(1));
+  handleRoute();
 });
-switchTab(window.location.hash.slice(1) || "home");
 
 function markdownToHtml(markdown) {
   if (!window.marked || typeof window.marked.parse !== "function") {
@@ -361,6 +403,7 @@ async function loadAbout() {
     card.className = "card markdown-body";
     card.innerHTML = markdownToHtml(markdown);
     container.replaceChildren(card);
+    arrowGame.addEntrance(container);
   } catch (error) {
     console.error("Could not load the about page:", error);
     showMessage(container, error.message || "Could not load the about page.", true);
@@ -386,6 +429,26 @@ async function loadProjects(jsonFile, containerId) {
       const card = document.createElement("article");
       card.className = "card markdown-body";
       card.innerHTML = markdownToHtml(item.content);
+      if (containerId === "tab-completed") {
+        const title = card.querySelector("h2");
+        const titleLink = title && title.querySelector("a");
+        if (title && titleLink && titleLink.textContent.trim() === "Pygame Blackjack") {
+          const heading = document.createElement("div");
+          heading.className = "blackjack-project-heading";
+          const playButton = document.createElement("button");
+          playButton.className = "blackjack-project-card";
+          playButton.type = "button";
+          playButton.setAttribute("aria-label", "Play Pygame Blackjack");
+          const image = document.createElement("img");
+          image.src = "bj_assets/card_back_blue.png";
+          image.alt = "";
+          playButton.appendChild(image);
+          playButton.addEventListener("click", () => blackjackGame.open());
+          title.classList.add("blackjack-project-title");
+          title.before(heading);
+          heading.append(playButton, title);
+        }
+      }
       return card;
     });
     container.replaceChildren(...cards);
@@ -676,7 +739,7 @@ async function loadPosts() {
       }
 
       const article = document.createElement("article");
-      article.className = "card blog-post";
+      article.className = "card blog-post post-pending";
       const header = document.createElement("div");
       header.className = "post-header";
       const title = document.createElement("h2");
@@ -695,10 +758,13 @@ async function loadPosts() {
       const details = document.createElement("div");
       details.className = "post-details";
       details.id = `post-details-${index}`;
+      const detailsInner = document.createElement("div");
+      detailsInner.className = "post-details-inner";
       const content = document.createElement("div");
       content.className = "markdown-body";
       content.innerHTML = markdownToHtml(post.content);
-      details.appendChild(content);
+      detailsInner.appendChild(content);
+      details.appendChild(detailsInner);
       const toggle = document.createElement("button");
       toggle.className = "post-toggle";
       toggle.type = "button";
@@ -706,21 +772,51 @@ async function loadPosts() {
       toggle.setAttribute("aria-expanded", "true");
       toggle.setAttribute("aria-controls", details.id);
       toggle.addEventListener("click", () => {
-        const collapsed = !details.hidden;
-        details.hidden = collapsed;
+        const collapsed = !article.classList.contains("collapsed");
         article.classList.toggle("collapsed", collapsed);
+        details.inert = collapsed;
+        details.setAttribute("aria-hidden", String(collapsed));
         toggle.textContent = collapsed ? "Maximize" : "Minimize";
         toggle.setAttribute("aria-expanded", String(!collapsed));
       });
       header.appendChild(toggle);
       article.append(header, details);
-      addCommentForm(post, details);
-      return article;
+      return { article, post, detailsInner };
     });
 
-    container.replaceChildren(...cards);
+    container.replaceChildren(...cards.map(({ article }) => article));
     if (cards.length === 0) {
       showMessage(container, "No posts yet. Check back soon.");
+      return;
+    }
+
+    const loadedPosts = new WeakSet();
+    const cardsByArticle = new WeakMap(cards.map((card) => [card.article, card]));
+    const loadPost = ({ article, post, detailsInner }) => {
+      if (loadedPosts.has(article)) {
+        return;
+      }
+      loadedPosts.add(article);
+      addCommentForm(post, detailsInner);
+      article.classList.remove("post-pending");
+      article.classList.add("post-loaded");
+    };
+
+    if ("IntersectionObserver" in window) {
+      const postObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            loadPost(cardsByArticle.get(entry.target));
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        root: contentWrapper,
+        rootMargin: "120px 0px"
+      });
+      cards.forEach(({ article }) => postObserver.observe(article));
+    } else {
+      cards.forEach(loadPost);
     }
   } catch (error) {
     console.error("Could not load blog posts:", error);
@@ -728,6 +824,28 @@ async function loadPosts() {
   }
 }
 
+arrowGame = setupArrowGame({
+  db,
+  markdownToHtml,
+  resizeImageToBase64,
+  onReturnToBlog: () => {
+    window.location.hash = "home";
+    handleRoute();
+  }
+});
+blackjackGame = setupBlackjackGame({
+  onReturnToBlog: () => {
+    window.location.hash = "home";
+    handleRoute();
+  }
+});
+blackjackGame = setupBlackjackGame({
+  onReturnToBlog: () => {
+    window.location.hash = "home";
+    handleRoute();
+  }
+});
+handleRoute();
 loadAbout();
 loadProjects("current.json", "tab-current");
 loadProjects("completed.json", "tab-completed");
