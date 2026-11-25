@@ -1,5 +1,14 @@
 [
   {
+    "id": "sticks-2",
+    "title": "The Online Sticks Game is developing nicely!",
+    "date": "2026-11-25",
+    "audio": "assets/04 Get Pawned.mp3",
+    "audioCredits": "\"Get Pawned\" by Punkcake",
+    "commentsLocked": false,
+    "content": "As it turns out, portforwarding is complicated. But, I've figured it out and some friends and I have been testing the sticks game over the past few days. I've been working on it too.\n\n![a game between me and a friend](./assets/sticks_game_03.png)\nThis was Xander and I playing a game.\n\nI've redone just about all of the netcode. There's a queue system now. People in the queue can spectate too.\n\n![me spectating a match](./assets/sticks_game_02.png)\nExample of what the spectator view is like.\n\nI plan on fully overhauling the gui too. I redid this like this to make it fit the window but it still just looks ugly to me. It also doesn't function the best. Right now, to attack you select which hand you're attacking with and what hand you're attacking but with buttons. I am planning on having real, tangible assets that look like hands that animate themselves and I will redo how the turn selection system works.\n\n![another game between me and a friend](./assets/sticks_game_04.png)\nA game between Vincent and me.\n\nI am also planning on adding some more changes that friends suggested to me such as turn rollback and spectating out of the queue, but those aren't first priority.\n\nI will be taking a break for Thanksgiving though. I also need to lock in on my Eagle scout paperwork. Don't expect another update in a while.\n\nI hope to finish this project and start another one soon! Have fun with those secret games you definetly already found!\n\n-Withered Detective"
+  },
+  {
     "id": "update-3",
     "title": "Second Big Update!",
     "date": "2026-11-23",
